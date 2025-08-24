@@ -9,7 +9,9 @@ def verify_access():
       data = request.json or {}
       app_version = data.get("appVersion", "0.0.0")
       is_physical_device = data.get("isPhysicalDevice", False)
-      client_public_ip = request.headers.getlist("X-Forwarded-For")[0] if request.headers.getlist("X-Forwarded-For") else request.remote_addr
+      x_forwarded_for = request.headers.get("X-Forwarded-For")
+
+      client_public_ip = x_forwarded_for.split(",")[0].strip() if x_forwarded_for else request.remote_addr
  
 
       # # 1. check device type

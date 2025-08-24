@@ -8,12 +8,12 @@ def verify_access():
   try:
       data = request.json or {}
       app_version = data.get("appVersion", "0.0.0")
-      device_type = data.get("deviceType", "unknown")
+      is_physical_device = data.get("isPhysicalDevice", False)
       client_ip = request.headers.get("X-Forwarded-For", request.remote_addr)
 
-      # 1. check device type
-      if device_type.lower() != "physical":
-          return jsonify({"allow": False, "reason": "Device not physical"})
+      # # 1. check device type
+      # if is_physical_device is not True:
+      #     return jsonify({"allow": False, "reason": "Device not physical"})
 
       # 2. check ip vietnam
       location = get_ip_location(client_ip)

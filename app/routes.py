@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .utils import compare_version, get_ip_location, MIN_VERSION
+from .utils import get_ip_location
 
 bp = Blueprint("routes", __name__)
 

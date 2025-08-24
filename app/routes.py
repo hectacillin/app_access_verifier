@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .utils import compare_version, is_ip_vietnam, MIN_VERSION
+from .utils import compare_version, get_ip_location, MIN_VERSION
 
 bp = Blueprint("routes", __name__)
 
@@ -16,8 +16,13 @@ def verify_access():
           return jsonify({"allow": False, "reason": "Device not physical"})
 
       # 2. check ip vietnam
-      if not is_ip_vietnam(client_ip):
-          return jsonify({"allow": False, "reason": "Not from Vietnam"})
+      location = get_ip_location(client_ip)
+      if location.get("country") != "VN":
+        return jsonify({
+            "allow": False,
+            "reason": f"Not from Vietnam ({location.get('country')})",
+            "location": location
+        })
 
       return jsonify({"allow": True})
   except Exception as e:
